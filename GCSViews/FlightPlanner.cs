@@ -3652,6 +3652,21 @@ namespace MissionPlanner.GCSViews
 
         private void getWPs(IProgressReporterDialogue sender)
         {
+            try
+            {
+                MAVLinkInterface port = MainV2.comPort;
+
+                if (!port.BaseStream.IsOpen)
+                {
+                    throw new Exception("Please connect first!");
+                }
+                port.setParam("MIS_ROUTE", float.Parse(cmb_route.SelectedItem.ToString()) / CurrentState.multiplierdist);
+            }
+            catch
+            {
+
+                throw new Exception("Can't set parameter");
+            }
             var type = (MAVLink.MAV_MISSION_TYPE)Invoke((Func<MAVLink.MAV_MISSION_TYPE>)delegate
             {
                 return (MAVLink.MAV_MISSION_TYPE)cmb_missiontype.SelectedValue;
@@ -3673,6 +3688,18 @@ namespace MissionPlanner.GCSViews
                 }).ConfigureAwait(false)).Result;
 
             WPtoScreen(cmds);
+            try
+            {
+                ((Control)sender).Enabled = false;
+                MainV2.comPort.setWPCurrent(MainV2.comPort.MAV.sysid, MainV2.comPort.MAV.compid,
+                    0); // set nav to 0
+            }
+            catch
+            {
+                CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+            }
+
+            ((Control)sender).Enabled = true;
         }
 
         public void insertSplineWPToolStripMenuItem_Click(object sender, EventArgs e)
@@ -5372,7 +5399,14 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 {
                     throw new Exception("Please connect first!");
                 }
-
+                try
+                {
+                    port.setParam("MIS_ROUTE", float.Parse(cmb_route.SelectedItem.ToString()) / CurrentState.multiplierdist);
+                }
+                catch 
+                {
+                    throw new Exception("Can't set parameter");
+                }
                 int a = 0;
 
                 // define the home point

@@ -5220,5 +5220,10 @@ namespace MissionPlanner.GCSViews
             hud1.displayCellVoltage = true;
             hud1.batterycellcount = iCellCount;
         }
+
+        private void BUT_route_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

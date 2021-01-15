@@ -205,6 +205,7 @@ public partial class MAVLink
         new message_info(219, "GOPRO_SET_RESPONSE", 162, 2, 2, typeof( mavlink_gopro_set_response_t )),
         new message_info(225, "EFI_STATUS", 208, 65, 65, typeof( mavlink_efi_status_t )),
         new message_info(226, "RPM", 207, 8, 8, typeof( mavlink_rpm_t )),
+        new message_info(227, "TEST_INFO", 108, 2, 2, typeof( mavlink_test_info_t )),
         new message_info(230, "ESTIMATOR_STATUS", 163, 42, 42, typeof( mavlink_estimator_status_t )),
         new message_info(231, "WIND_COV", 105, 40, 40, typeof( mavlink_wind_cov_t )),
         new message_info(232, "GPS_INPUT", 151, 63, 65, typeof( mavlink_gps_input_t )),
@@ -473,6 +474,7 @@ public partial class MAVLink
         GOPRO_SET_RESPONSE = 219,
         EFI_STATUS = 225,
         RPM = 226,
+        TEST_INFO = 227,
         ESTIMATOR_STATUS = 230,
         WIND_COV = 231,
         GPS_INPUT = 232,
@@ -7547,7 +7549,28 @@ public partial class MAVLink
     
     };
 
-    
+    /// extensions_start 0
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 2)]
+    ///<summary> RPM sensor output. </summary>
+    public struct mavlink_test_info_t
+    {
+        public mavlink_test_info_t(byte testid, byte teststatus)
+        {
+            this.testid = testid;
+            this.teststatus = teststatus;
+
+        }
+        /// <summary>RPM Sensor1.   </summary>
+        [Units("")]
+        [Description("Test id.")]
+        public byte testid;
+        /// <summary>RPM Sensor2.   </summary>
+        [Units("")]
+        [Description("Test status.")]
+        public byte teststatus;
+
+    };
+
     /// extensions_start 9
     [StructLayout(LayoutKind.Sequential,Pack=1,Size=52)]
     ///<summary> Read registers for a device. </summary>

@@ -1460,6 +1460,13 @@ namespace MissionPlanner
         public float brklevel { get; set; }
         public bool armed { get; set; }
 
+        //test info
+        [GroupText("Test")]
+        [DisplayText("Test id")]
+        public byte testid { get; set; }
+        [GroupText("Test")]
+        [DisplayText("Test status")]
+        public byte teststatus { get; set; }
         // Sik radio
         [GroupText("Telem")]
         [DisplayText("Sik Radio rssi")]
@@ -2706,6 +2713,17 @@ namespace MissionPlanner
                             rpm2 = rpm.rpm2;
 
                             //MAVLink.packets[(byte)MAVLink.MSG_NAMES.NAV_CONTROLLER_OUTPUT);
+                        }
+
+                        break;
+                    case (uint)MAVLink.MAVLINK_MSG_ID.TEST_INFO:
+
+
+                        {
+                            var test_info = mavLinkMessage.ToStructure<MAVLink.mavlink_test_info_t>();
+
+                            testid = test_info.testid;
+                            teststatus = test_info.teststatus; 
                         }
 
                         break;
